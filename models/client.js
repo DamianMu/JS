@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   client.associate = function(models) {
 
-    Task.belongsTo(models.Type);
+    client.belongsTo(models.Type);
     // associations can be defined here
   };
   return client;

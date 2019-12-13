@@ -49,7 +49,7 @@ app.get('/clients', function (req, res) {
 
 app.put('/clients/:id', jsonParser, (req, res) => {
   const id = parseInt(req.params.id)
-  return db.client.findByPk(id)
+  return db.Client.findByPk(id)
   .then((client) => {
     if ( client === null ) {
       return res.status(400).send("Sorry, no client :(")
@@ -68,7 +68,7 @@ app.put('/clients/:id', jsonParser, (req, res) => {
 
 app.delete('/clients/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  return db.client.findByPk(id)
+  return db.Client.findByPk(id)
     .then((client) => client.destroy({ force: true }))
     .then(() => res.send({ id }))
     .catch((err) => {

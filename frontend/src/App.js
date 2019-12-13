@@ -76,12 +76,12 @@ class App extends Component {
   _refreshclients() {
     axios.get('http://localhost:4000/clients').then((response) => {
       this.setState({
-        clients: response.data
+        client: response.data
       })
     });
   }
   render() {
-    let clients = this.state.clients.map((client) => {
+    let client = this.state.clients.map((client) => {
       return (
         <tr key={client.id}>
           <td>{client.id}</td>
@@ -209,7 +209,7 @@ class App extends Component {
           </thead>
 
           <tbody>
-            {clients}
+            {client}
           </tbody>
         </Table>
       </div>
