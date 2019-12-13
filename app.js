@@ -22,91 +22,91 @@ app.use(function(req, res, next) {
 
 const jsonParser = bodyParser.json()
 
-// Add a task
+// Add a client
 
-app.post('/tasks', jsonParser, (req, res) => {
-  const { firstName, lastName, email, content } = req.body
-  return db.Task.create({ firstName, lastName, email, content})
-    .then((task) => res.send({ firstName, lastName, email, content, id:task.id }))
+app.post('/clients', jsonParser, (req, res) => {
+  const { firstName, lastName, email, product, productCost } = req.body
+  return db.client.create({ firstName, lastName, email, product, productCost})
+    .then((client) => res.send({ firstName, lastName, email, product, productCost, id:client.id }))
     .catch((err) => {
-      console.log('Sorry, cannot create a task :(', JSON.stringify(Task))
+      console.log('Sorry, cannot create a client :(', JSON.stringify(err))
       return res.status(400).send(err)
     })
 })
 
-// Get all tasks
+// Get all clients
 
-app.get('/tasks', function (req, res) {
-  return db.Task.findAll()
-    .then((tasks) => res.send(tasks))
+app.get('/clients', function (req, res) {
+  return db.client.findAll()
+    .then((clients) => res.send(clients))
     .catch((err) => {
-      console.log('Sorry, theres no tasks :(', JSON.stringify(err))
+      console.log('Sorry, theres no clients :(', JSON.stringify(err))
       return res.send(err)
     })
 })
 
-// Update a task
+// Update a client
 
-app.put('/tasks/:id', jsonParser, (req, res) => {
+app.put('/clients/:id', jsonParser, (req, res) => {
   const id = parseInt(req.params.id)
-  return db.Task.findByPk(id)
-  .then((task) => {
-    if ( task === null ) {
-      return res.status(400).send("Sorry, no task :(")
+  return db.client.findByPk(id)
+  .then((client) => {
+    if ( client === null ) {
+      return res.status(400).send("Sorry, no client :(")
     }
     const { firstName, lastName, email, content } = req.body
-    return task.update({ firstName, lastName, email, content })
-      .then(() => res.send(task))
+    return client.update({ firstName, lastName, email, product, productCost })
+      .then(() => res.send(client))
       .catch((err) => {
-        console.log('Sorry, cannot update a task :(', JSON.stringify(err))
+        console.log('Sorry, cannot update a client :(', JSON.stringify(err))
         res.status(400).send(err)
       })
   })
 })
 
-// Delete a task
+// Delete a client
 
-app.delete('/tasks/:id', (req, res) => {
+app.delete('/clients/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  return db.Task.findByPk(id)
-    .then((task) => task.destroy({ force: true }))
+  return db.client.findByPk(id)
+    .then((client) => client.destroy({ force: true }))
     .then(() => res.send({ id }))
     .catch((err) => {
-      console.log('Sorry, cannot delete a task :(', JSON.stringify(err))
+      console.log('Sorry, cannot delete a client :(', JSON.stringify(err))
       res.status(400).send(err)
     })
 })
 
-app.get('/categories', function (req, res) {
-  return db.Category.findAll()
-    .then((categories) => res.send(categories))
+app.get('/types', function (req, res) {
+  return db.Type.findAll()
+    .then((types) => res.send(types))
     .catch((err) => {
-      console.log('Sorry, no categories', JSON.stringify(err))
+      console.log('Sorry, no types', JSON.stringify(err))
       return res.send(err)
     })
 })
 
-app.post('/categories', jsonParser, (req, res) => {
+app.post('/types', jsonParser, (req, res) => {
   const { name } = req.body
-  return db.Category.create({ name })
-    .then((category) => res.send(category))
+  return db.Type.create({ name })
+    .then((type) => res.send(type))
     .catch((err) => {
-      console.log('Oooops! Can not create a category!', JSON.stringify(movie))
+      console.log('Oooops! Can not create a type!', JSON.stringify(movie))
       return res.status(400).send(err)
     })
 })
 
-app.put('/tasks/:id/addCategory', jsonParser, (req, res) => {
+app.put('/clients/:id/addtype', jsonParser, (req, res) => {
   const id = parseInt(req.params.id)
-  return db.Task.findByPk(id)
-  .then((task) => {
-    if ( task === null ) {
+  return db.client.findByPk(id)
+  .then((client) => {
+    if ( client === null ) {
       return res.status(400).send("Ooops! No movie!")
     }
-    const { categoryId } = req.body
-    return db.Category.findByPk(categoryId)
-      .then((category) => task.addCategory(category)) /* #### */
-      .then(() => res.send({ categoryId }))
+    const { typeId } = req.body
+    return db.Type.findByPk(typeId)
+      .then((type) => client.addtype(type)) /* #### */
+      .then(() => res.send({ typeId }))
       .catch((err) => {
         console.log('Oooops! Can not delete a movie', JSON.stringify(err))
         res.status(400).send(err)
@@ -114,18 +114,18 @@ app.put('/tasks/:id/addCategory', jsonParser, (req, res) => {
   })
 })
 
-app.get('/tasks/:id/categories', jsonParser, (req, res) => {
+app.get('/clients/:id/types', jsonParser, (req, res) => {
   const id = parseInt(req.params.id)
-  return db.task.findByPk(id)
-  .then((task) => {
-    if ( task === null ) {
-      return res.status(400).send("Sorry, no task")
+  return db.Client.findByPk(id)
+  .then((client) => {
+    if ( client === null ) {
+      return res.status(400).send("Sorry, no client")
     }
 
-    return task.getCategories()
-      .then((categories) => res.send(categories))
+    return client.gettypes()
+      .then((types) => res.send(types))
       .catch((err) => {
-        console.log('Sorry, cannot add task to category', JSON.stringify(err))
+        console.log('Sorry, cannot add client to type', JSON.stringify(err))
         res.status(400).send(err)
       })
   })
