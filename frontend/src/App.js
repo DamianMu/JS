@@ -59,7 +59,7 @@ class App extends Component {
       this._refreshclients();
 
       this.setState({
-        editclientModal: false, editclientData: { id: '', firstName: '', lastName: '',email: '',product: '',productCost: '' }
+        editclientModal: false, editclientData: { id: '', firstName: '', lastName: '', email: '', product: '', productCost: '' }
       })
     });
   }
@@ -89,9 +89,9 @@ class App extends Component {
           <td>{client.lastName}</td>
           <td>{client.email}</td>
           <td>{client.product}</td>
-          <td>{client.productCost}</td>
+          <td>{client.productCost}$</td>
           <td>
-            <Button color="success" size="sm" className="mr-2" onClick={this.editclient.bind(this, client.id, client.firstName, client.lastName)}>Edit</Button>
+            <Button color="success" size="sm" className="mr-2" onClick={this.editclient.bind(this, client.id, client.firstName, client.lastName, client.email, client.product, client.productCost)}>Edit</Button>
             <Button color="danger" size="sm" onClick={this.deleteclient.bind(this, client.id)}>Delete</Button>
           </td>
         </tr>
