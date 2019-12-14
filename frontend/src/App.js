@@ -4,91 +4,95 @@ import { Input, FormGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Ta
 
 class App extends Component {
   state = {
-    tasks: [],
-    newTaskData: {
+    client: [],
+    newclientData: {
       firstName: '',
       lastName: '',
       email: '',
-      content: ''
+      product: '',
+      productCost: ''
     },
-    editTaskData: {
+    editclientData: {
         firstName: '',
         lastName: '',
         email: '',
-        content: ''
+        product: '',
+        productCost: ''
     },
-    newTaskModal: false,
-    editTaskModal: false
+    newclientModal: false,
+    editclientModal: false
   }
   componentWillMount() {
-    this._refreshTasks();
+    this._refreshclients();
   }
-  toggleNewTaskModal() {
+  toggleNewclientModal() {
     this.setState({
-      newTaskModal: ! this.state.newTaskModal
+      newclientModal: ! this.state.newclientModal
     });
   }
-  toggleEditTaskModal() {
+  toggleEditclientModal() {
     this.setState({
-      editTaskModal: ! this.state.editTaskModal
+      editclientModal: ! this.state.editclientModal
     });
   }
-  addTask() {
-    axios.post('http://localhost:4000/tasks', this.state.newTaskData).then((response) => {
-      let { tasks } = this.state;
+  addclient() {
+    axios.post('http://localhost:4000/clients', this.state.newclientData).then((response) => {
+      let { client } = this.state;
 
-      tasks.push(response.data);
+      client.push(response.data);
 
-      this.setState({ tasks, newTaskModal: false, newTaskData: {
+      this.setState({ client, newclientModal: false, newclientData: {
         firstName: '',
         lastName: '',
         email: '',
-        content: ''
+        product: '',
+        productCost: ''
       }});
     });
   }
-  updateTask() {
-    let { firstName, lastName, email, content } = this.state.editTaskData;
+  updateclient() {
+    let { firstName, lastName, email, product, productCost } = this.state.editclientData;
 
-    axios.put('http://localhost:4000/tasks/' + this.state.editTaskData.id, {
-      firstName, lastName, email, content
+    axios.put('http://localhost:4000/clients/' + this.state.editclientData.id, {
+      firstName, lastName, email, product, productCost
     }).then((response) => {
-      this._refreshTasks();
+      this._refreshclients();
 
       this.setState({
-        editTaskModal: false, editTaskData: { id: '', firstName: '', lastName: '',email: '',content: '' }
+        editclientModal: false, editclientData: { id: '', firstName: '', lastName: '',email: '',product: '',productCost: '' }
       })
     });
   }
-  editTask(id, firstName, lastName, email, content) {
+  editclient(id, firstName, lastName, email, product, productCost) {
     this.setState({
-      editTaskData: { id, firstName, lastName, email, content }, editTaskModal: ! this.state.editTaskModal
+      editclientData: { id, firstName, lastName, email, product, productCost }, editclientModal: ! this.state.editclientModal
     });
   }
-  deleteTask(id) {
-    axios.delete('http://localhost:4000/tasks/' + id).then((response) => {
-      this._refreshTasks();
+  deleteclient(id) {
+    axios.delete('http://localhost:4000/clients/' + id).then((response) => {
+      this._refreshclients();
     });
   }
-  _refreshTasks() {
-    axios.get('http://localhost:4000/tasks').then((response) => {
+  _refreshclients() {
+    axios.get('http://localhost:4000/clients').then((response) => {
       this.setState({
-        tasks: response.data
+        client: response.data
       })
     });
   }
   render() {
-    let tasks = this.state.tasks.map((task) => {
+    let client = this.state.client.map((client) => {
       return (
-        <tr key={task.id}>
-          <td>{task.id}</td>
-          <td>{task.firstName}</td>
-          <td>{task.lastName}</td>
-          <td>{task.email}</td>
-          <td>{task.content}</td>
+        <tr key={client.id}>
+          <td>{client.id}</td>
+          <td>{client.firstName}</td>
+          <td>{client.lastName}</td>
+          <td>{client.email}</td>
+          <td>{client.product}</td>
+          <td>{client.productCost}</td>
           <td>
-            <Button color="success" size="sm" className="mr-2" onClick={this.editTask.bind(this, task.id, task.firstName, task.lastName)}>Edit</Button>
-            <Button color="danger" size="sm" onClick={this.deleteTask.bind(this, task.id)}>Delete</Button>
+            <Button color="success" size="sm" className="mr-2" onClick={this.editclient.bind(this, client.id, client.firstName, client.lastName)}>Edit</Button>
+            <Button color="danger" size="sm" onClick={this.deleteclient.bind(this, client.id)}>Delete</Button>
           </td>
         </tr>
       )
@@ -96,88 +100,128 @@ class App extends Component {
     return (
       <div className="App container">
 
-      <h1>Tasks App</h1>
+      <h1>clients App</h1>
 
-      <Button className="my-3" color="primary" onClick={this.toggleNewTaskModal.bind(this)}>Add Task</Button>
+      <Button className="my-3" color="primary" onClick={this.toggleNewclientModal.bind(this)}>Add client</Button>
 
-      <Modal isOpen={this.state.newTaskModal} toggle={this.toggleNewTaskModal.bind(this)}>
-        <ModalHeader toggle={this.toggleNewTaskModal.bind(this)}>Add a new task</ModalHeader>
+      <Modal isOpen={this.state.newclientModal} toggle={this.toggleNewclientModal.bind(this)}>
+        <ModalHeader toggle={this.toggleNewclientModal.bind(this)}>Add a new client</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Label for="firstName">First Name</Label>
-            <Input id="firstName" value={this.state.newTaskData.task} onChange={(e) => {
-              let { newTaskData } = this.state;
+            <Input id="firstName" value={this.state.newclientData.client} onChange={(e) => {
+              let { newclientData } = this.state;
 
-              newTaskData.firstName = e.target.value;
+              newclientData.firstName = e.target.value;
 
-              this.setState({ newTaskData });
+              this.setState({ newclientData });
             }} />
           </FormGroup>
           <FormGroup>
             <Label for="lastName">Last Name</Label>
-            <Input id="lastName" value={this.state.newTaskData.lastName} onChange={(e) => {
-              let { newTaskData } = this.state;
+            <Input id="lastName" value={this.state.newclientData.lastName} onChange={(e) => {
+              let { newclientData } = this.state;
 
-              newTaskData.lastName = e.target.value;
+              newclientData.lastName = e.target.value;
 
-              this.setState({ newTaskData });           
+              this.setState({ newclientData });           
             }} />
           </FormGroup>
           <FormGroup>
             <Label for="email">E-mail</Label>
-            <Input id="email" value={this.state.newTaskData.email} onChange={(e) => {
-              let { newTaskData } = this.state;
+            <Input id="email" value={this.state.newclientData.email} onChange={(e) => {
+              let { newclientData } = this.state;
 
-              newTaskData.email = e.target.value;
+              newclientData.email = e.target.value;
 
-              this.setState({ newTaskData });           
+              this.setState({ newclientData });           
             }} />
           </FormGroup>
           <FormGroup>
-            <Label for="content">Content</Label>
-            <Input id="content" value={this.state.newTaskData.content} onChange={(e) => {
-              let { newTaskData } = this.state;
+            <Label for="product">Product</Label>
+            <Input id="product" value={this.state.newclientData.product} onChange={(e) => {
+              let { newclientData } = this.state;
 
-              newTaskData.content = e.target.value;
+              newclientData.product = e.target.value;
 
-              this.setState({ newTaskData });           
+              this.setState({ newclientData });           
             }} />
-          </FormGroup>
-        </ModalBody>
+            </FormGroup>
+            <FormGroup>
+            <Label for="productCost">Price</Label>
+            <Input id="productCost" value={this.state.newclientData.productCost} onChange={(e) => {
+              let { newclientData } = this.state;
+
+              newclientData.productCost = e.target.value;
+
+              this.setState({ newclientData });           
+            }} />
+            </FormGroup>
+            </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.addTask.bind(this)}>Add Task</Button>{' '}
-          <Button color="secondary" onClick={this.toggleNewTaskModal.bind(this)}>Cancel</Button>
+          <Button color="primary" onClick={this.addclient.bind(this)}>Add client</Button>{' '}
+          <Button color="secondary" onClick={this.toggleNewclientModal.bind(this)}>Cancel</Button>
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={this.state.editTaskModal} toggle={this.toggleEditTaskModal.bind(this)}>
-        <ModalHeader toggle={this.toggleEditTaskModal.bind(this)}>Edit a new book</ModalHeader>
+      <Modal isOpen={this.state.editclientModal} toggle={this.toggleEditclientModal.bind(this)}>
+        <ModalHeader toggle={this.toggleEditclientModal.bind(this)}>Edit Client</ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Label for="title">Title</Label>
-            <Input id="title" value={this.state.editTaskData.title} onChange={(e) => {
-              let { editTaskData } = this.state;
+            <Label for="title">First Name</Label>
+            <Input id="title" value={this.state.editclientData.firstName} onChange={(e) => {
+              let { editclientData } = this.state;
 
-              editTaskData.title = e.target.value;
+              editclientData.firstName = e.target.value;
 
-              this.setState({ editTaskData });
+              this.setState({ editclientData });
             }} />
           </FormGroup>
           <FormGroup>
-            <Label for="rating">lastName</Label>
-            <Input id="rating" value={this.state.editTaskData.rating} onChange={(e) => {
-              let { editTaskData } = this.state;
+            <Label for="rating">Last Name</Label>
+            <Input id="rating" value={this.state.editclientData.lastName} onChange={(e) => {
+              let { editclientData } = this.state;
 
-              editTaskData.rating = e.target.value;
+              editclientData.lastName = e.target.value;
 
-              this.setState({ editTaskData });
+              this.setState({ editclientData });
+            }} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="rating">E-mail</Label>
+            <Input id="rating" value={this.state.editclientData.email} onChange={(e) => {
+              let { editclientData } = this.state;
+
+              editclientData.email = e.target.value;
+
+              this.setState({ editclientData });
+            }} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="rating">Product</Label>
+            <Input id="rating" value={this.state.editclientData.product} onChange={(e) => {
+              let { editclientData } = this.state;
+
+              editclientData.product = e.target.value;
+
+              this.setState({ editclientData });
+            }} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="rating">Price</Label>
+            <Input id="rating" value={this.state.editclientData.productCost} onChange={(e) => {
+              let { editclientData } = this.state;
+
+              editclientData.productCost = e.target.value;
+
+              this.setState({ editclientData });
             }} />
           </FormGroup>
 
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.updateTask.bind(this)}>Update Task</Button>{' '}
-          <Button color="secondary" onClick={this.toggleEditTaskModal.bind(this)}>Cancel</Button>
+          <Button color="primary" onClick={this.updateclient.bind(this)}>Update client</Button>{' '}
+          <Button color="secondary" onClick={this.toggleEditclientModal.bind(this)}>Cancel</Button>
         </ModalFooter>
       </Modal>
 
@@ -189,12 +233,13 @@ class App extends Component {
               <th>First Name</th>
               <th>Last Name</th>
               <th>E-mail</th>
-              <th>Content</th>
+              <th>Product</th>
+              <th>ProductCost</th>
             </tr>
           </thead>
 
           <tbody>
-            {tasks}
+            {client}
           </tbody>
         </Table>
       </div>

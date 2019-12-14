@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Type.associate = function(models) {
 
-    Type.hasMany(models.Task);
+    // Type.hasMany(models.client);
     // associations can be defined here
   };
   return Type;
