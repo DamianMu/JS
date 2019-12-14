@@ -5,11 +5,11 @@ module.exports = (sequelize, DataTypes) => {
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
     product: DataTypes.STRING,
-    productCost: DataTypes.INTEGER
+    productCost: DataTypes.STRING
   }, {});
   client.associate = function(models) {
 
-    client.belongsTo(models.Type);
+    // client.belongsTo(models.Type);
     // associations can be defined here
   };
   return client;

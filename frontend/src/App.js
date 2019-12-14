@@ -4,7 +4,7 @@ import { Input, FormGroup, Label, Modal, ModalHeader, ModalBody, ModalFooter, Ta
 
 class App extends Component {
   state = {
-    clients: [],
+    client: [],
     newclientData: {
       firstName: '',
       lastName: '',
@@ -37,11 +37,11 @@ class App extends Component {
   }
   addclient() {
     axios.post('http://localhost:4000/clients', this.state.newclientData).then((response) => {
-      let { clients } = this.state;
+      let { client } = this.state;
 
-      clients.push(response.data);
+      client.push(response.data);
 
-      this.setState({ clients, newclientModal: false, newclientData: {
+      this.setState({ client, newclientModal: false, newclientData: {
         firstName: '',
         lastName: '',
         email: '',
@@ -81,7 +81,7 @@ class App extends Component {
     });
   }
   render() {
-    let client = this.state.clients.map((client) => {
+    let client = this.state.client.map((client) => {
       return (
         <tr key={client.id}>
           <td>{client.id}</td>
@@ -165,24 +165,54 @@ class App extends Component {
       </Modal>
 
       <Modal isOpen={this.state.editclientModal} toggle={this.toggleEditclientModal.bind(this)}>
-        <ModalHeader toggle={this.toggleEditclientModal.bind(this)}>Edit a new book</ModalHeader>
+        <ModalHeader toggle={this.toggleEditclientModal.bind(this)}>Edit Client</ModalHeader>
         <ModalBody>
           <FormGroup>
-            <Label for="title">Title</Label>
-            <Input id="title" value={this.state.editclientData.title} onChange={(e) => {
+            <Label for="title">First Name</Label>
+            <Input id="title" value={this.state.editclientData.firstName} onChange={(e) => {
               let { editclientData } = this.state;
 
-              editclientData.title = e.target.value;
+              editclientData.firstName = e.target.value;
 
               this.setState({ editclientData });
             }} />
           </FormGroup>
           <FormGroup>
-            <Label for="rating">lastName</Label>
-            <Input id="rating" value={this.state.editclientData.rating} onChange={(e) => {
+            <Label for="rating">Last Name</Label>
+            <Input id="rating" value={this.state.editclientData.lastName} onChange={(e) => {
               let { editclientData } = this.state;
 
-              editclientData.rating = e.target.value;
+              editclientData.lastName = e.target.value;
+
+              this.setState({ editclientData });
+            }} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="rating">E-mail</Label>
+            <Input id="rating" value={this.state.editclientData.email} onChange={(e) => {
+              let { editclientData } = this.state;
+
+              editclientData.email = e.target.value;
+
+              this.setState({ editclientData });
+            }} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="rating">Product</Label>
+            <Input id="rating" value={this.state.editclientData.product} onChange={(e) => {
+              let { editclientData } = this.state;
+
+              editclientData.product = e.target.value;
+
+              this.setState({ editclientData });
+            }} />
+          </FormGroup>
+          <FormGroup>
+            <Label for="rating">Price</Label>
+            <Input id="rating" value={this.state.editclientData.productCost} onChange={(e) => {
+              let { editclientData } = this.state;
+
+              editclientData.productCost = e.target.value;
 
               this.setState({ editclientData });
             }} />

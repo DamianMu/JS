@@ -49,12 +49,12 @@ app.get('/clients', function (req, res) {
 
 app.put('/clients/:id', jsonParser, (req, res) => {
   const id = parseInt(req.params.id)
-  return db.Client.findByPk(id)
+  return db.client.findByPk(id)
   .then((client) => {
     if ( client === null ) {
       return res.status(400).send("Sorry, no client :(")
     }
-    const { firstName, lastName, email, content } = req.body
+    const { firstName, lastName, email, product, productCost } = req.body
     return client.update({ firstName, lastName, email, product, productCost })
       .then(() => res.send(client))
       .catch((err) => {
@@ -68,7 +68,7 @@ app.put('/clients/:id', jsonParser, (req, res) => {
 
 app.delete('/clients/:id', (req, res) => {
   const id = parseInt(req.params.id)
-  return db.Client.findByPk(id)
+  return db.client.findByPk(id)
     .then((client) => client.destroy({ force: true }))
     .then(() => res.send({ id }))
     .catch((err) => {
@@ -91,7 +91,7 @@ app.post('/types', jsonParser, (req, res) => {
   return db.Type.create({ name })
     .then((type) => res.send(type))
     .catch((err) => {
-      console.log('Oooops! Can not create a type!', JSON.stringify(movie))
+      console.log('Oooops! Can not create a type!', JSON.stringify(err))
       return res.status(400).send(err)
     })
 })
@@ -116,7 +116,7 @@ app.put('/clients/:id/addtype', jsonParser, (req, res) => {
 
 app.get('/clients/:id/types', jsonParser, (req, res) => {
   const id = parseInt(req.params.id)
-  return db.Client.findByPk(id)
+  return db.client.findByPk(id)
   .then((client) => {
     if ( client === null ) {
       return res.status(400).send("Sorry, no client")
