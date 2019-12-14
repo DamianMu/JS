@@ -5,12 +5,14 @@ module.exports = (sequelize, DataTypes) => {
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
     product: DataTypes.STRING,
-    productCost: DataTypes.STRING
+    productCost: DataTypes.STRING,
   }, {});
   client.associate = function(models) {
 
-    // client.belongsTo(models.Type);
-    // associations can be defined here
+    client.belongsTo(models.type, {
+      foreignKey: 'typeId',
+      as: 'client',
+    });
   };
   return client;
 };

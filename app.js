@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const uuidv4 = require('uuid/v4');
 const cors = require('cors');
+const albumsQueue = require('./queues/albumsQueue')
 
 const app = express()
 const port = 4000
@@ -25,9 +26,9 @@ const jsonParser = bodyParser.json()
 // Add a client
 
 app.post('/clients', jsonParser, (req, res) => {
-  const { firstName, lastName, email, product, productCost } = req.body
-  return db.client.create({ firstName, lastName, email, product, productCost})
-    .then((client) => res.send({ firstName, lastName, email, product, productCost, id:client.id }))
+  const { firstName, lastName, email, product, productCost, typeId } = req.body
+  return db.client.create({ firstName, lastName, email, product, productCost, typeId})
+    .then((client) => res.send({ firstName, lastName, email, product, productCost, typeId, id:client.id }))
     .catch((err) => {
       console.log('Sorry, cannot create a client :(', JSON.stringify(err))
       return res.status(400).send(err)
@@ -78,7 +79,7 @@ app.delete('/clients/:id', (req, res) => {
 })
 
 app.get('/types', function (req, res) {
-  return db.Type.findAll()
+  return db.type.findAll()
     .then((types) => res.send(types))
     .catch((err) => {
       console.log('Sorry, no types', JSON.stringify(err))
@@ -88,7 +89,7 @@ app.get('/types', function (req, res) {
 
 app.post('/types', jsonParser, (req, res) => {
   const { name } = req.body
-  return db.Type.create({ name })
+  return db.type.create({ name })
     .then((type) => res.send(type))
     .catch((err) => {
       console.log('Oooops! Can not create a type!', JSON.stringify(err))
@@ -96,39 +97,9 @@ app.post('/types', jsonParser, (req, res) => {
     })
 })
 
-app.put('/clients/:id/addtype', jsonParser, (req, res) => {
-  const id = parseInt(req.params.id)
-  return db.client.findByPk(id)
-  .then((client) => {
-    if ( client === null ) {
-      return res.status(400).send("Ooops! No movie!")
-    }
-    const { typeId } = req.body
-    return db.Type.findByPk(typeId)
-      .then((type) => client.addtype(type)) /* #### */
-      .then(() => res.send({ typeId }))
-      .catch((err) => {
-        console.log('Oooops! Can not delete a movie', JSON.stringify(err))
-        res.status(400).send(err)
-      })
-  })
-})
-
-app.get('/clients/:id/types', jsonParser, (req, res) => {
-  const id = parseInt(req.params.id)
-  return db.client.findByPk(id)
-  .then((client) => {
-    if ( client === null ) {
-      return res.status(400).send("Sorry, no client")
-    }
-
-    return client.gettypes()
-      .then((types) => res.send(types))
-      .catch((err) => {
-        console.log('Sorry, cannot add client to type', JSON.stringify(err))
-        res.status(400).send(err)
-      })
-  })
+app.get('/import', (req, res) => {
+  albumsQueue.add({url: 'https://google.pl'})
+  return res.send({status: 'done'})
 })
 
 module.exports = server;
