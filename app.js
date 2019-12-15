@@ -98,7 +98,7 @@ app.post('/types', jsonParser, (req, res) => {
 })
 
 app.get('/import', (req, res) => {
-  albumsQueue.add({url: 'https://google.pl'})
+  albumsQueue.add({url: 'http://api.github.com/posts'})
   return res.send({status: 'done'})
 })
 

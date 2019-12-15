@@ -11,7 +11,7 @@ albumsQueue.process(function(job, done){
       if(err) {
         done(err)
       }
-      console.log("The file was saved!")
+      console.log("The file was saved")
     });
   })
   .catch(error => {
