@@ -1,14 +1,23 @@
 {
   "development": {
-    "dialect": "sqlite",
-    "storage": "./database.dev.sqlite3"
+    "username": "admin",
+    "password": "admin",
+    "database": "postgres",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
   },
   "test": {
-    "dialect": "sqlite",
-    "storage": ":memory"
+    "username": "admin",
+    "password": "admin",
+    "database": "postgres",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
   },
   "production": {
-    "dialect": "sqlite",
-    "storage": "./database.prod.sqlite3"
+    "username": "admin",
+    "password": "admin",
+    "database": "postgres",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
   }
 }
