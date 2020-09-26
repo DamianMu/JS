@@ -25,6 +25,9 @@ function Nav() {
                 <Link to="Statuses">
                     <li>Statuses</li>
                 </Link>
+                <Link to="Categories">
+                    <li>Categories</li>
+                </Link>
             </ul>
         </nav>
     )
